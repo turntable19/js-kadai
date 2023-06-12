@@ -1,7 +1,6 @@
-for (let i = 1; i < 11; ++i) {
+for (let i = 10; i >= 1; i--) {
     let s = '(' + i + '):';
-    for (let j = 0; j < i; ++j) {
-        s = s + '*';
-    }
+    const marks = '*'.repeat(i);
+    s = s + marks
     console.log(s);
 }
