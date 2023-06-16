@@ -1,5 +1,5 @@
 $(function () {
     $('#btn').on('click', function() {
-    $('#msg').css('color', 'blue').text('テキスト');
+    $('#msg').css('color', 'blue').text('メッセージ');
     });
   });
