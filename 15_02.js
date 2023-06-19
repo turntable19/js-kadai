@@ -1,73 +1,49 @@
-// 商品クラスの生成
-class Item {
-    // コンストラクタ
-    constructor(id, name, stock) {
-        //　引数の値を使ってプロパティの初期化を行う
-        this.id = id;       // 商品ID
-        this.name = name;   // 商品名
-        this.stock = stock; // 在庫数
-    }
-
-    // メソッド
-    // Idの値を返す
-    getId() {
-        return this.id;
-    }
-
-    // nameの値を返す
-    getName() {
-        return this.name;
-    }
-
-    // stockの値を返す
-    getStock() {
-        return this.stock;
-    }
-
-    // 商品の追加
-    addStock(num) {
-        this.stock += num;
-    }
-
-    // 商品の販売
-    sale(num) {
-        if (this.stock < num) {
-            throw new Error('在庫が足りません')
-        } else {
-            this.stock -= num;
-        }
-    }
-}
-
-class Bed extends Item {
-    constructor(id, name, stock, size) {
-        //　引数の値を使ってプロパティの初期化を行う
-        super(id, name, stock);
-        this.size = size;           //　ベッドのサイズ
-    }
-
-    getSize() {
-        return this.size;
-    }
-}
-
-// インスタンスの生成
-let bed1 = new Bed('0001', 'ソファベッド', 100, 'M');
-let bed2 = new Bed('0002', 'シングルベッド', 100, 'S');
-let bed3 = new Bed('0003', '子ども用ベッド', 10, 'S');
-let item4 = new Item('0004', '鍋', 100);
-
-let itemList = [bed1, bed2, bed3, item4]
-
-itemList.forEach((e) => {
-    console.log(e);
-})
-
-
-
-//　全体の在庫数を確認
-let totalStock = 0;
-for (let i = 0; i < itemList.length; i++) {
-    totalStock += itemList[i].getStock();
-}
-console.log('全体の在庫数:' + totalStock);
+// 取得したデータをリスト化する関数
+function htmlString(prefcode, address1, address2, address3, kana1, kana2) {
+    let html = ''
+    html += '<ul>';
+    html += '<li>都道府県コード：' + prefcode + '</li>';
+    html += '<li>都道府県：' + address1 + '</li>';
+    html += '<li>市区町村：' + address2 + '</li>';
+    html += '<li>町域：' + address3 + '</li>';
+    html += '<li>都道府県(カナ)：' + kana1 + '</li>';
+    html += '<li>市区町村(カナ)：' + kana1 + '</li>';
+    html += '<li>町域(カナ)：' + kana1 + '</li>';
+    html += '</ul>';
+    return html;
+  }
+  
+  $(function () {
+    $('#search').click(function(event){
+        // 入力された郵便番号を取得
+        let param = {zipcode:$('#zipcode').val()}
+  
+        // AjaxによりWeb APIを呼び出す処理
+        $.ajax({
+            type: 'GET',                                    // GETで送信
+            data: param,                                    // リクエストパラメーター
+            url: 'https://zipcloud.ibsnet.co.jp/api/search', // URL
+            dataType: 'jsonp',                              // データ型 JSONP
+        })
+        .done(function(res) {
+            if (res.status == 200) {                    //　処理が成功したとき
+                    //該当する住所を表示
+                    let html = '';
+                    for (let i = 0; i < res.results.length; i++) {
+                      let r = res.results[i];
+                      console.log(r);                   // 取得した値を確認
+                      html += '<h3>住所' + (i + 1) + '</h3>';
+                      html += htmlString(r.prefcode, r.address1, r.address2, r.address3, r.kana1, r.kana2);
+                    }
+                    $('#zip_result').html(html);
+            } else {
+                //エラーの場合
+                $('#zip_result').html(res.message);
+            }
+  
+        })
+        .fail(function(res){
+            $('#zip_result').html('通信エラー');
+        });
+    });
+  });
