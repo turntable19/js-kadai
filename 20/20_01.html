@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8"/>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+      <p>ulをv-forで表示した場合</p>
+      <ul>
+        <li v-for="m in msgs1">
+        {{ m }}
+        </li>
+      </ul>
+
+      <p>tableをv-forで表示した場合</p>
+      <table>
+        <tr v-for="m in msgs2">
+          <td>{{ m.jp }}</td>
+          <td>{{ m.eng }}</td>
+        </tr>
+      </table>
+
+    </div>    
+
+  <script src="20_08.js" charset="UTF-8"></script>
+</body>
+</html>
